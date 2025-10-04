@@ -77,6 +77,6 @@ class ProductController extends Controller
     {
         $this->productService->delete($product);
 
-        return response()->noContent();
+        return response()->json(null, 204);
     }
 }

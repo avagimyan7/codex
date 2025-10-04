@@ -21,7 +21,7 @@ class CategoryFactory extends Factory
             'name' => $name,
             'slug' => Str::slug($name).'-'.$this->faker->unique()->numberBetween(1, 9999),
             'parent_id' => null,
-            'is_active' => $this->faker->boolean(90),
+            'is_active' => true,
         ];
     }
 }

@@ -57,7 +57,7 @@ class CategoryController extends Controller
     {
         $this->categoryService->delete($category);
 
-        return response()->noContent();
+        return response()->json(null, 204);
     }
 
     public function tree(): JsonResponse
