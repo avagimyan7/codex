@@ -24,4 +24,25 @@ class CategoryFactory extends Factory
             'is_active' => true,
         ];
     }
+
+    public function active(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => true,
+        ]);
+    }
+
+    public function inactive(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => false,
+        ]);
+    }
+
+    public function childOf(Category $parent): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'parent_id' => $parent->getKey(),
+        ]);
+    }
 }
