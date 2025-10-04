@@ -4,7 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @php($manifestPath = public_path('build/manifest.json'))
+    @if (file_exists($manifestPath))
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @else
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.13/dist/tailwind.min.css">
+    @endif
 </head>
 <body class="bg-gray-100 text-gray-900 min-h-screen">
     <header class="bg-white shadow">
