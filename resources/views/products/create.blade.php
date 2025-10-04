@@ -1,0 +1,26 @@
+@extends('layouts.app')
+
+@section('content')
+    <nav class="mb-4 text-sm text-gray-500">
+        <a href="{{ route('products.index') }}" class="text-indigo-600 hover:text-indigo-800">{{ __('Products') }}</a>
+        <span class="mx-2">/</span>
+        <span>{{ __('Create') }}</span>
+    </nav>
+
+    <div class="rounded-lg bg-white p-6 shadow">
+        <h1 class="text-xl font-semibold text-gray-800">{{ __('Create product') }}</h1>
+        <form action="{{ route('products.store') }}" method="POST" class="mt-6 space-y-6">
+            @csrf
+            @include('products._form', ['product' => $product, 'categoriesForSelect' => $categoriesForSelect])
+
+            <div class="flex items-center gap-3">
+                <button type="submit" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-700">
+                    {{ __('Save') }}
+                </button>
+                <a href="{{ route('products.index') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
+                    {{ __('Cancel') }}
+                </a>
+            </div>
+        </form>
+    </div>
+@endsection

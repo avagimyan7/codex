@@ -7,6 +7,7 @@ use App\DTO\Category\UpdateCategoryDto;
 use App\Models\Category;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 
 class CategoryService
@@ -15,9 +16,13 @@ class CategoryService
     {
     }
 
-    public function paginate(int $perPage = 15): LengthAwarePaginator
+    public function paginate(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        return $this->categoryRepository->paginate($perPage);
+        if ($filters === []) {
+            return $this->categoryRepository->paginate($perPage);
+        }
+
+        return $this->categoryRepository->filterPaginate($filters, $perPage);
     }
 
     public function find(int $id): Category
@@ -64,6 +69,14 @@ class CategoryService
     public function tree(): array
     {
         return $this->categoryRepository->tree();
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function activeList(): Collection
+    {
+        return $this->categoryRepository->getActiveList();
     }
 
     private function prepareSlug(?string $slug, string $name, ?int $ignoreId = null): string
