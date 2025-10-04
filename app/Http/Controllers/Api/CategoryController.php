@@ -25,7 +25,7 @@ class CategoryController extends Controller
         $perPage = (int) $request->integer('per_page', 15);
         $perPage = max(1, min($perPage, 100));
 
-        $categories = $this->categoryService->paginate($perPage);
+        $categories = $this->categoryService->paginate([], $perPage);
 
         return CategoryResource::collection($categories);
     }

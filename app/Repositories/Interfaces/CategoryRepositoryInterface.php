@@ -6,10 +6,13 @@ use App\DTO\Category\StoreCategoryDto;
 use App\DTO\Category\UpdateCategoryDto;
 use App\Models\Category;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 interface CategoryRepositoryInterface
 {
     public function paginate(int $perPage = 15): LengthAwarePaginator;
+
+    public function filterPaginate(array $filters, int $perPage = 15): LengthAwarePaginator;
 
     public function findById(int $id): Category;
 
@@ -23,4 +26,9 @@ interface CategoryRepositoryInterface
      * @return array<int, mixed>
      */
     public function tree(): array;
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getActiveList(): Collection;
 }
