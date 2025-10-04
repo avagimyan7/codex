@@ -1,26 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
-    <nav class="mb-4 text-sm text-gray-500">
-        <a href="{{ route('categories.index') }}" class="text-indigo-600 hover:text-indigo-800">{{ __('Categories') }}</a>
-        <span class="mx-2">/</span>
-        <span>{{ __('Create') }}</span>
-    </nav>
+    <div class="not-prose space-y-6">
+        <nav class="flex items-center gap-2 text-sm text-slate-500">
+            <a href="{{ route('categories.index') }}" class="text-blue-600 hover:text-blue-700">{{ __('Categories') }}</a>
+            <span>/</span>
+            <span>{{ __('Create') }}</span>
+        </nav>
 
-    <div class="rounded-lg bg-white p-6 shadow">
-        <h1 class="text-xl font-semibold text-gray-800">{{ __('Create category') }}</h1>
-        <form action="{{ route('categories.store') }}" method="POST" class="mt-6 space-y-6">
-            @csrf
-            @include('categories._form', ['category' => $category, 'categoriesForSelect' => $categoriesForSelect])
+        <div class="card space-y-6">
+            <header class="space-y-1">
+                <h1 class="text-2xl font-semibold text-slate-900">{{ __('Create category') }}</h1>
+                <p class="text-sm text-slate-500">{{ __('Add a new category to organise your catalog.') }}</p>
+            </header>
 
-            <div class="flex items-center gap-3">
-                <button type="submit" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-700">
-                    {{ __('Save') }}
-                </button>
-                <a href="{{ route('categories.index') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
-                    {{ __('Cancel') }}
-                </a>
-            </div>
-        </form>
+            <form action="{{ route('categories.store') }}" method="POST" class="space-y-4">
+                @csrf
+                @include('categories._form', ['category' => $category, 'categoriesForSelect' => $categoriesForSelect])
+
+                <div class="flex flex-wrap items-center gap-3">
+                    <button type="submit" class="btn-primary">
+                        {{ __('Save') }}
+                    </button>
+                    <a href="{{ route('categories.index') }}" class="btn-muted">
+                        {{ __('Cancel') }}
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 @endsection

@@ -12,8 +12,8 @@
     $fieldValue = old($name, $value);
 @endphp
 
-<div>
-    <label for="{{ $fieldId }}" class="block text-sm font-medium text-gray-700">
+<div class="space-y-1">
+    <label for="{{ $fieldId }}" class="block text-sm font-medium text-slate-700">
         {{ $label }}
         @if($required)
             <span class="text-red-500">*</span>
@@ -25,10 +25,10 @@
         type="{{ $type }}"
         value="{{ $fieldValue }}"
         @if($placeholder) placeholder="{{ $placeholder }}" @endif
-        {{ $attributes->merge(['class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm']) }}
+        {{ $attributes->merge(['class' => 'block w-full rounded-md border-gray-300 bg-white text-sm shadow-sm transition focus:border-blue-500 focus:ring-blue-500']) }}
         @if($required) required @endif
     >
     @error($name)
-        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+        <p class="text-sm text-red-600">{{ $message }}</p>
     @enderror
 </div>

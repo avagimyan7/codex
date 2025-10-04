@@ -1,11 +1,69 @@
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+@layer base {
+    html {
+        @apply bg-slate-100 text-slate-900 antialiased;
+    }
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    body {
+        @apply font-sans min-h-screen;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-semibold text-slate-900;
+    }
+}
+
+@layer components {
+    .btn-primary {
+        @apply inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded px-4 py-2 transition shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center gap-2 border border-blue-100 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded px-4 py-2 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+    }
+
+    .btn-muted {
+        @apply inline-flex items-center gap-2 border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 rounded px-4 py-2 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+    }
+
+    .card {
+        @apply shadow-lg p-6 bg-white rounded-lg ring-1 ring-slate-100;
+    }
+
+    .table-clean {
+        @apply table-auto w-full border border-slate-200 text-sm text-gray-700;
+    }
+
+    .table-clean thead {
+        @apply bg-slate-50 text-left uppercase text-xs text-slate-500 tracking-wide;
+    }
+
+    .table-clean thead th {
+        @apply px-4 py-3 font-semibold;
+    }
+
+    .table-clean tbody tr {
+        @apply even:bg-slate-50/40 hover:bg-blue-50 transition;
+    }
+
+    .table-clean tbody td {
+        @apply px-4 py-3 align-middle;
+    }
+
+    .badge-success {
+        @apply inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800;
+    }
+
+    .badge-danger {
+        @apply inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800;
+    }
+}
+
+@layer utilities {
+    .container-page {
+        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    }
 }

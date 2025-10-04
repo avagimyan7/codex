@@ -1,29 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-    <nav class="mb-4 text-sm text-gray-500">
-        <a href="{{ route('categories.index') }}" class="text-indigo-600 hover:text-indigo-800">{{ __('Categories') }}</a>
-        <span class="mx-2">/</span>
-        <a href="{{ route('categories.show', $category) }}" class="text-indigo-600 hover:text-indigo-800">{{ $category->name }}</a>
-        <span class="mx-2">/</span>
-        <span>{{ __('Edit') }}</span>
-    </nav>
+    <div class="not-prose space-y-6">
+        <nav class="flex items-center gap-2 text-sm text-slate-500">
+            <a href="{{ route('categories.index') }}" class="text-blue-600 hover:text-blue-700">{{ __('Categories') }}</a>
+            <span>/</span>
+            <a href="{{ route('categories.show', $category) }}" class="text-blue-600 hover:text-blue-700">{{ $category->name }}</a>
+            <span>/</span>
+            <span>{{ __('Edit') }}</span>
+        </nav>
 
-    <div class="rounded-lg bg-white p-6 shadow">
-        <h1 class="text-xl font-semibold text-gray-800">{{ __('Edit category') }}</h1>
-        <form action="{{ route('categories.update', $category) }}" method="POST" class="mt-6 space-y-6">
-            @csrf
-            @method('PATCH')
-            @include('categories._form', ['category' => $category, 'categoriesForSelect' => $categoriesForSelect])
+        <div class="card space-y-6">
+            <header class="space-y-1">
+                <h1 class="text-2xl font-semibold text-slate-900">{{ __('Edit category') }}</h1>
+                <p class="text-sm text-slate-500">{{ __('Update category details and hierarchy placement.') }}</p>
+            </header>
 
-            <div class="flex items-center gap-3">
-                <button type="submit" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-700">
-                    {{ __('Save changes') }}
-                </button>
-                <a href="{{ route('categories.show', $category) }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
-                    {{ __('Cancel') }}
-                </a>
-            </div>
-        </form>
+            <form action="{{ route('categories.update', $category) }}" method="POST" class="space-y-4">
+                @csrf
+                @method('PATCH')
+                @include('categories._form', ['category' => $category, 'categoriesForSelect' => $categoriesForSelect])
+
+                <div class="flex flex-wrap items-center gap-3">
+                    <button type="submit" class="btn-primary">
+                        {{ __('Save changes') }}
+                    </button>
+                    <a href="{{ route('categories.show', $category) }}" class="btn-muted">
+                        {{ __('Cancel') }}
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 @endsection
