@@ -1,0 +1,24 @@
+// Переменные до bootstrap (пример — скругления, цвет шапки таблицы)
+$border-radius: 1rem;
+$card-border-radius: 1rem;
+$btn-border-radius: .75rem;
+$table-striped-bg: #f8f9fa;
+$body-bg: #f3f4f6;
+$body-color: #111827;
+$link-color: #0d6efd;
+
+@import "bootstrap/scss/bootstrap";
+
+// Общие доработки
+.app-gradient {
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 20% 0%, rgba(255,255,255,.12) 0%, transparent 60%),
+    linear-gradient(135deg, #8A2BE2 0%, #FF00A8 100%);
+}
+.card-elevated { box-shadow: 0 15px 40px rgba(16,24,40,.12); }
+.table-card thead th { background:#2b2f36; color:#fff; border:0; }
+.table-card tbody tr:hover { background: #f1f3f5; }
+.toolbar .form-control, .toolbar .form-select { min-width: 180px; }
+.btn-ghost { color:#334155; }
+.btn-ghost:hover { color:#111827; background:#f1f5f9; }

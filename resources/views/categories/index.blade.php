@@ -1,83 +1,77 @@
 @extends('layouts.app')
 
 @section('content')
-<x-flash />
-<div class="container">
-    <div class="toolbar">
-        <a href="{{ route('categories.create') }}" class="btn btn-primary">+ {{ __('Create') }}</a>
-        <form method="GET" class="flex flex-wrap gap-3 ml-auto">
-            <input name="search" value="{{ request('search', $filters['search'] ?? '') }}" placeholder="{{ __('Search…') }}" class="field rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-            <select name="parent_id" class="field rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                <option value="">{{ __('All parents') }}</option>
-                @foreach($parentOptions ?? [] as $id => $name)
-                    <option value="{{ $id }}" @selected((string)request('parent_id', $filters['parent_id'] ?? '') === (string)$id)>{{ $name }}</option>
-                @endforeach
-            </select>
-            <select name="is_active" class="field rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                <option value="">{{ __('Any status') }}</option>
-                <option value="1" @selected(request('is_active', $filters['is_active'] ?? '') === '1')>{{ __('Active') }}</option>
-                <option value="0" @selected(request('is_active', $filters['is_active'] ?? '') === '0')>{{ __('Inactive') }}</option>
-            </select>
-            <select name="per_page" class="field rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                @foreach([10,15,25,50] as $size)
-                    <option value="{{ $size }}" @selected((int)request('per_page', $filters['per_page'] ?? 15) === $size)>{{ $size }} / {{ __('page') }}</option>
-                @endforeach
-            </select>
-            <button class="btn btn-ghost">{{ __('Filter') }}</button>
-            <a href="{{ route('categories.index') }}" class="btn btn-ghost">{{ __('Reset') }}</a>
-        </form>
-    </div>
-
-    <x-card-table :title="__('Categories')">
-        <div class="overflow-x-auto">
-            <table class="pretty-table">
-                <thead>
-                    <tr>
-                        <th>{{ __('Date') }}</th>
-                        <th>{{ __('ID / Slug') }}</th>
-                        <th>{{ __('Name') }}</th>
-                        <th>{{ __('Parent') }}</th>
-                        <th>{{ __('Active') }}</th>
-                        <th class="text-right">{{ __('Actions') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($categories as $category)
-                        <tr class="hover:bg-gray-100 transition">
-                            <td>{{ optional($category->created_at)->format('Y-m-d H:i') }}</td>
-                            <td>
-                                <div class="font-medium text-gray-900">#{{ $category->id }}</div>
-                                <div class="text-xs text-gray-500">{{ $category->slug }}</div>
-                            </td>
-                            <td class="font-medium text-gray-900">{{ $category->name }}</td>
-                            <td>{{ optional($category->parent)->name ?? '—' }}</td>
-                            <td>
-                                <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $category->is_active ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700' }}">
-                                    {{ $category->is_active ? __('Yes') : __('No') }}
-                                </span>
-                            </td>
-                            <td class="text-right space-x-2">
-                                <a href="{{ route('categories.show', $category) }}" class="btn btn-ghost">{{ __('View') }}</a>
-                                <a href="{{ route('categories.edit', $category) }}" class="btn btn-ghost">{{ __('Edit') }}</a>
-                                <form action="{{ route('categories.destroy', $category) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('Delete item?') }}')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-ghost text-red-600">{{ __('Delete') }}</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center text-gray-500 py-8">{{ __('No data') }}</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        <div class="mt-4">
-            {{ $categories->withQueryString()->links() }}
-        </div>
-    </x-card-table>
+<div class="d-flex flex-wrap align-items-center gap-2 toolbar mb-3">
+  <a href="{{ route('categories.create') }}" class="btn btn-primary px-4">+ Create</a>
+  <form method="GET" class="d-flex flex-wrap align-items-center gap-2 ms-auto">
+    <input class="form-control" name="search" value="{{ request('search') }}" placeholder="Search…">
+    <select class="form-select" name="parent_id">
+      <option value="">All parents</option>
+      @foreach(($parentOptions ?? []) as $id=>$name)
+        <option value="{{ $id }}" @selected(request('parent_id')==$id)>{{ $name }}</option>
+      @endforeach
+    </select>
+    <select class="form-select" name="is_active">
+      <option value="">Any status</option>
+      <option value="1" @selected(request('is_active')==='1')>Active</option>
+      <option value="0" @selected(request('is_active')==='0')>Inactive</option>
+    </select>
+    <select class="form-select" name="per_page">
+      @foreach([15,25,50,100] as $pp)
+        <option value="{{ $pp }}" @selected(request('per_page')==$pp)>{{ $pp }} / page</option>
+      @endforeach
+    </select>
+    <button class="btn btn-ghost" type="submit">Filter</button>
+    <a href="{{ route('categories.index') }}" class="btn btn-ghost">Reset</a>
+  </form>
 </div>
+
+<x-card-table :title="__('Categories')">
+  <thead>
+    <tr>
+      <th style="width:14rem">{{ __('Date') }}</th>
+      <th>{{ __('ID / Slug') }}</th>
+      <th>{{ __('Name') }}</th>
+      <th>{{ __('Parent') }}</th>
+      <th class="text-center">{{ __('Active') }}</th>
+      <th class="text-end" style="width:12rem">{{ __('Actions') }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    @forelse($categories as $category)
+      <tr>
+        <td class="text-muted">{{ optional($category->created_at)->format('Y-m-d H:i') }}</td>
+        <td>
+          <div class="fw-semibold">#{{ $category->id }}</div>
+          <div class="text-muted small">{{ $category->slug }}</div>
+        </td>
+        <td class="fw-semibold">{{ $category->name }}</td>
+        <td>{{ optional($category->parent)->name ?? '—' }}</td>
+        <td class="text-center">
+          @if($category->is_active)
+            <span class="badge rounded-pill text-bg-success">{{ __('Yes') }}</span>
+          @else
+            <span class="badge rounded-pill text-bg-secondary">{{ __('No') }}</span>
+          @endif
+        </td>
+        <td class="text-end">
+          <a href="{{ route('categories.show', $category) }}" class="btn btn-sm btn-outline-secondary me-1">View</a>
+          <a href="{{ route('categories.edit', $category) }}" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+          <form action="{{ route('categories.destroy', $category) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete item?')">
+            @csrf @method('DELETE')
+            <button class="btn btn-sm btn-outline-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    @empty
+      <tr><td colspan="6" class="text-center text-muted py-5">No data</td></tr>
+    @endforelse
+  </tbody>
+  <x-slot:footer>
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="text-muted small">Total: {{ $categories->total() }}</div>
+      {{ $categories->withQueryString()->links() }}
+    </div>
+  </x-slot:footer>
+</x-card-table>
 @endsection
