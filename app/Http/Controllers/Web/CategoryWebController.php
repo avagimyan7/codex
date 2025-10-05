@@ -36,6 +36,7 @@ class CategoryWebController extends Controller
         $filters = array_filter($filters, static fn ($value) => $value !== null && $value !== '');
 
         $categories = $this->categoryService->paginate($filters, $perPage);
+        $categories->getCollection()->load('parent');
 
         $parentOptions = $this->categoryService->activeList()
             ->pluck('name', 'id')

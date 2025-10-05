@@ -4,9 +4,8 @@ import typography from '@tailwindcss/typography';
 
 export default {
     content: [
-        './storage/framework/views/*.php',
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './resources/views/**/*.blade.php',
+        './app/**/*.php',
         './resources/js/**/*.js',
     ],
     theme: {
@@ -27,6 +26,10 @@ export default {
                     800: '#1e40af',
                     900: '#1e3a8a',
                 },
+            },
+            container: {
+                center: true,
+                padding: '1rem',
             },
         },
     },

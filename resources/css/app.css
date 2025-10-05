@@ -2,68 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-    html {
-        @apply bg-slate-100 text-slate-900 antialiased;
-    }
-
-    body {
-        @apply font-sans min-h-screen;
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-        @apply font-semibold text-slate-900;
-    }
+/* Фон страницы как на скрине */
+.bg-app-gradient {
+  background: radial-gradient(1200px 600px at 20% 0%, rgba(255,255,255,0.15) 0%, transparent 60%),
+              linear-gradient(135deg, #8A2BE2 0%, #FF00A8 100%);
+  min-height: 100vh;
 }
 
-@layer components {
-    .btn-primary {
-        @apply inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded px-4 py-2 transition shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
-    }
-
-    .btn-secondary {
-        @apply inline-flex items-center gap-2 border border-blue-100 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded px-4 py-2 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
-    }
-
-    .btn-muted {
-        @apply inline-flex items-center gap-2 border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 rounded px-4 py-2 transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
-    }
-
-    .card {
-        @apply shadow-lg p-6 bg-white rounded-lg ring-1 ring-slate-100;
-    }
-
-    .table-clean {
-        @apply table-auto w-full border border-slate-200 text-sm text-gray-700;
-    }
-
-    .table-clean thead {
-        @apply bg-slate-50 text-left uppercase text-xs text-slate-500 tracking-wide;
-    }
-
-    .table-clean thead th {
-        @apply px-4 py-3 font-semibold;
-    }
-
-    .table-clean tbody tr {
-        @apply even:bg-slate-50/40 hover:bg-blue-50 transition;
-    }
-
-    .table-clean tbody td {
-        @apply px-4 py-3 align-middle;
-    }
-
-    .badge-success {
-        @apply inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800;
-    }
-
-    .badge-danger {
-        @apply inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800;
-    }
+/* Карточка-обёртка таблицы */
+.card {
+  @apply bg-white/95 backdrop-blur rounded-2xl shadow-2xl ring-1 ring-black/5;
+}
+.card-header {
+  @apply bg-neutral-800 text-white rounded-t-2xl px-6 py-4 text-sm font-semibold tracking-wide;
+}
+.card-body {
+  @apply p-6;
 }
 
-@layer utilities {
-    .container-page {
-        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-    }
+/* Таблица в стиле скрина */
+.pretty-table {
+  @apply w-full table-auto text-sm text-gray-700;
 }
+.pretty-table thead th {
+  @apply text-left font-semibold;
+}
+.pretty-table tbody tr {
+  @apply odd:bg-gray-50 even:bg-white;
+}
+.pretty-table td, .pretty-table th {
+  @apply px-4 py-3 align-middle whitespace-nowrap;
+}
+.pretty-table tfoot td {
+  @apply border-t;
+}
+
+/* Кнопки/инпуты */
+.btn {
+  @apply inline-flex items-center px-4 py-2 rounded-lg font-medium transition shadow-sm;
+}
+.btn-primary { @apply bg-blue-600 hover:bg-blue-700 text-white; }
+.btn-ghost   { @apply text-gray-600 hover:text-gray-900; }
+
+.toolbar { @apply flex flex-wrap items-center gap-3 mb-4; }
+.field   { @apply w-full md:w-auto; }
