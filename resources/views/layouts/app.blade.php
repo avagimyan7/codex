@@ -1,36 +1,52 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    @php($manifestPath = public_path('build/manifest.json'))
-    @if (file_exists($manifestPath))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @else
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.13/dist/tailwind.min.css">
-    @endif
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-100 text-gray-900 min-h-screen">
-    <header class="bg-white shadow">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-            <a href="{{ route('categories.index') }}" class="text-lg font-semibold text-indigo-600">
-                {{ config('app.name', __('Dashboard')) }}
-            </a>
-            <nav class="space-x-4">
-                <a href="{{ route('categories.index') }}" class="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('categories.*') ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
-                    {{ __('Categories') }}
-                </a>
-                <a href="{{ route('products.index') }}" class="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('products.*') ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100' }}">
-                    {{ __('Products') }}
-                </a>
-            </nav>
-        </div>
-    </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        @include('components.flash')
-        @yield('content')
-    </main>
+<body class="bg-slate-100 text-slate-900">
+    <div class="min-h-screen flex flex-col">
+        <header class="border-b border-slate-200 bg-white/90 backdrop-blur">
+            <div class="container-page flex flex-col gap-4 py-4 md:flex-row md:items-center md:justify-between">
+                <a href="{{ route('categories.index') }}" class="flex items-center gap-3">
+                    <span class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-blue-600 text-white text-xl font-bold shadow-sm">LC</span>
+                    <div class="leading-tight">
+                        <span class="block text-lg font-semibold">{{ config('app.name', 'Laravel') }}</span>
+                        <span class="block text-sm text-slate-500">{{ __('Inventory Dashboard') }}</span>
+                    </div>
+                </a>
+                <nav class="flex items-center gap-2">
+                    <a href="{{ route('products.index') }}"
+                        class="inline-flex items-center rounded-md px-4 py-2 text-sm font-medium transition {{ request()->routeIs('products.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:bg-blue-50' }}">
+                        {{ __('Products') }}
+                    </a>
+                    <a href="{{ route('categories.index') }}"
+                        class="inline-flex items-center rounded-md px-4 py-2 text-sm font-medium transition {{ request()->routeIs('categories.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:bg-blue-50' }}">
+                        {{ __('Categories') }}
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="flex-1 py-10">
+            <div class="container-page space-y-6">
+                @include('components.flash')
+                <div class="prose prose-slate max-w-none">
+                    @yield('content')
+                </div>
+            </div>
+        </main>
+
+        <footer class="border-t border-slate-200 bg-white">
+            <div class="container-page py-4 text-sm text-slate-500">
+                &copy; {{ now()->year }} {{ config('app.name', 'Laravel') }}. {{ __('All rights reserved.') }}
+            </div>
+        </footer>
+    </div>
 </body>
+
 </html>
