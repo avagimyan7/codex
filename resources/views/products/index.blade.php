@@ -1,84 +1,76 @@
 @extends('layouts.app')
 
 @section('content')
-<x-flash />
-<div class="container">
-    <div class="toolbar">
-        <a href="{{ route('products.create') }}" class="btn btn-primary">+ {{ __('Create') }}</a>
-        <form method="GET" class="flex flex-wrap gap-3 ml-auto">
-            <input name="search" value="{{ request('search', $filters['search'] ?? '') }}" placeholder="{{ __('Search…') }}" class="field rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-            <select name="category_id" class="field rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                <option value="">{{ __('All categories') }}</option>
-                @foreach($categoryOptions ?? [] as $id => $name)
-                    <option value="{{ $id }}" @selected((string)request('category_id', $filters['category_id'] ?? '') === (string)$id)>{{ $name }}</option>
-                @endforeach
-            </select>
-            <select name="is_active" class="field rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                <option value="">{{ __('Any status') }}</option>
-                <option value="1" @selected(request('is_active', $filters['is_active'] ?? '') === '1')>{{ __('Active') }}</option>
-                <option value="0" @selected(request('is_active', $filters['is_active'] ?? '') === '0')>{{ __('Inactive') }}</option>
-            </select>
-            <input type="number" step="0.01" name="price_min" value="{{ request('price_min', $filters['price_min'] ?? '') }}" placeholder="{{ __('Min price') }}" class="field rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-            <input type="number" step="0.01" name="price_max" value="{{ request('price_max', $filters['price_max'] ?? '') }}" placeholder="{{ __('Max price') }}" class="field rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-            <select name="sort" class="field rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                <option value="">{{ __('Sort by') }}</option>
-                @foreach(($sortOptions ?? []) as $value => $label)
-                    <option value="{{ $value }}" @selected(request('sort', $filters['sort'] ?? '') === $value)>{{ $label }}</option>
-                @endforeach
-            </select>
-            <select name="per_page" class="field rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                @foreach([10,15,25,50] as $size)
-                    <option value="{{ $size }}" @selected((int)request('per_page', $filters['per_page'] ?? 15) === $size)>{{ $size }} / {{ __('page') }}</option>
-                @endforeach
-            </select>
-            <button class="btn btn-ghost">{{ __('Filter') }}</button>
-            <a href="{{ route('products.index') }}" class="btn btn-ghost">{{ __('Reset') }}</a>
-        </form>
-    </div>
-
-    <x-card-table :title="__('Products')">
-        <div class="overflow-x-auto">
-            <table class="pretty-table">
-                <thead>
-                    <tr>
-                        <th>{{ __('Date') }}</th>
-                        <th>{{ __('SKU') }}</th>
-                        <th>{{ __('Name') }}</th>
-                        <th>{{ __('Price') }}</th>
-                        <th>{{ __('Quantity') }}</th>
-                        <th class="text-right">{{ __('Actions') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($products as $p)
-                        <tr class="hover:bg-gray-100 transition">
-                            <td>{{ optional($p->created_at)->format('Y-m-d H:i') }}</td>
-                            <td>{{ $p->sku }}</td>
-                            <td class="font-medium text-gray-900">{{ $p->name }}</td>
-                            <td>{{ number_format($p->price, 2) }} {{ $p->currency }}</td>
-                            <td>{{ $p->quantity }}</td>
-                            <td class="text-right space-x-2">
-                                <a href="{{ route('products.show', $p) }}" class="btn btn-ghost">{{ __('View') }}</a>
-                                <a href="{{ route('products.edit', $p) }}" class="btn btn-ghost">{{ __('Edit') }}</a>
-                                <form action="{{ route('products.destroy', $p) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('Delete item?') }}')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-ghost text-red-600">{{ __('Delete') }}</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center text-gray-500 py-8">{{ __('No data') }}</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        <div class="mt-4">
-            {{ $products->withQueryString()->links() }}
-        </div>
-    </x-card-table>
+<div class="d-flex flex-wrap align-items-center gap-2 toolbar mb-3">
+  <a href="{{ route('products.create') }}" class="btn btn-primary px-4">+ Create</a>
+  <form method="GET" class="d-flex flex-wrap align-items-center gap-2 ms-auto">
+    <input class="form-control" name="search" value="{{ request('search') }}" placeholder="Search…">
+    <select class="form-select" name="category_id">
+      <option value="">All categories</option>
+      @foreach(($categoriesForSelect ?? []) as $id=>$name)
+        <option value="{{ $id }}" @selected(request('category_id')==$id)>{{ $name }}</option>
+      @endforeach
+    </select>
+    <select class="form-select" name="is_active">
+      <option value="">Any status</option>
+      <option value="1" @selected(request('is_active')==='1')>Active</option>
+      <option value="0" @selected(request('is_active')==='0')>Inactive</option>
+    </select>
+    <input class="form-control" name="price_min" value="{{ request('price_min') }}" placeholder="Min price" type="number" step="0.01">
+    <input class="form-control" name="price_max" value="{{ request('price_max') }}" placeholder="Max price" type="number" step="0.01">
+    <select class="form-select" name="sort">
+      <option value="">Sort by</option>
+      @foreach(['name','-price','price','-created_at','created_at'] as $s)
+        <option value="{{ $s }}" @selected(request('sort')===$s)>{{ $s }}</option>
+      @endforeach
+    </select>
+    <select class="form-select" name="per_page">
+      @foreach([15,25,50,100] as $pp)
+        <option value="{{ $pp }}" @selected(request('per_page')==$pp)>{{ $pp }} / page</option>
+      @endforeach
+    </select>
+    <button class="btn btn-ghost" type="submit">Filter</button>
+    <a href="{{ route('products.index') }}" class="btn btn-ghost">Reset</a>
+  </form>
 </div>
+
+<x-card-table :title="__('Products')">
+  <thead>
+    <tr>
+      <th style="width:14rem">{{ __('Date') }}</th>
+      <th>{{ __('SKU') }}</th>
+      <th>{{ __('Name') }}</th>
+      <th class="text-end">{{ __('Price') }}</th>
+      <th class="text-end">{{ __('Quantity') }}</th>
+      <th class="text-end" style="width:12rem">{{ __('Actions') }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    @forelse($products as $p)
+      <tr>
+        <td class="text-muted">{{ optional($p->created_at)->format('Y-m-d H:i') }}</td>
+        <td class="fw-medium">{{ $p->sku }}</td>
+        <td class="fw-semibold">{{ $p->name }}</td>
+        <td class="text-end">{{ number_format($p->price, 2) }} {{ $p->currency }}</td>
+        <td class="text-end">{{ $p->quantity }}</td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-secondary me-1" href="{{ route('products.show',$p) }}">View</a>
+          <a class="btn btn-sm btn-outline-primary me-1" href="{{ route('products.edit',$p) }}">Edit</a>
+          <form action="{{ route('products.destroy',$p) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete item?')">
+            @csrf @method('DELETE')
+            <button class="btn btn-sm btn-outline-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    @empty
+      <tr><td colspan="6" class="text-center text-muted py-5">No data</td></tr>
+    @endforelse
+  </tbody>
+  <x-slot:footer>
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="text-muted small">Total: {{ $products->total() }}</div>
+      {{ $products->withQueryString()->links() }}
+    </div>
+  </x-slot:footer>
+</x-card-table>
 @endsection

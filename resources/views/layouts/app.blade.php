@@ -1,28 +1,42 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/scss/app.scss','resources/js/app.js'])
 </head>
-<body class="bg-app-gradient text-gray-900 min-h-screen flex flex-col">
-    <div class="flex-1">
-        <header class="py-6">
-            <div class="max-w-6xl mx-auto px-4">
-                <nav class="flex items-center justify-between bg-white/10 backdrop-blur rounded-2xl px-6 py-4 shadow-lg text-white">
-                    <div class="text-lg font-semibold tracking-wide">{{ config('app.name', 'Dashboard') }}</div>
-                    <div class="flex items-center gap-4 text-sm font-medium">
-                        <a href="{{ route('products.index') }}" class="transition {{ request()->routeIs('products.*') ? 'text-white' : 'text-white/70 hover:text-white' }}">{{ __('Products') }}</a>
-                        <a href="{{ route('categories.index') }}" class="transition {{ request()->routeIs('categories.*') ? 'text-white' : 'text-white/70 hover:text-white' }}">{{ __('Categories') }}</a>
-                    </div>
-                </nav>
+<body class="app-gradient d-flex flex-column">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 sticky-top shadow-sm" style="backdrop-filter: blur(12px);">
+        <div class="container py-2">
+            <a class="navbar-brand fw-semibold" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#appNavbar" aria-controls="appNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="appNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-medium">
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.index') }}">{{ __('Products') }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('categories.*') ? 'active' : '' }}" href="{{ route('categories.index') }}">{{ __('Categories') }}</a>
+                    </li>
+                </ul>
             </div>
-        </header>
+        </div>
+    </nav>
 
-        <main class="max-w-6xl mx-auto px-4 py-10">
+    <main class="flex-grow-1">
+        <div class="container py-5">
+            @if(session('success'))
+                <div class="alert alert-success shadow-sm">{{ session('success') }}</div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger shadow-sm">{{ session('error') }}</div>
+            @endif
+
             @yield('content')
-        </main>
-    </div>
+        </div>
+    </main>
 </body>
 </html>
