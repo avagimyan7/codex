@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    @vite(['resources/scss/app.scss','resources/js/app.js'])
+    @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 <body class="app-gradient d-flex flex-column">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 sticky-top shadow-sm" style="backdrop-filter: blur(12px);">
