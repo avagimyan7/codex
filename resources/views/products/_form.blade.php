@@ -1,84 +1,55 @@
-@php
-    /** @var \App\Models\Product $product */
-    $categoryOptions = $categoriesForSelect ?? [];
-    $currencyOptions = ['AMD' => 'AMD', 'USD' => 'USD', 'EUR' => 'EUR'];
-@endphp
+@csrf
+@if(($method ?? null) === 'PUT')
+    @method('PUT')
+@endif
 
-<div class="space-y-4">
-    <div class="grid gap-4 sm:grid-cols-2">
-        <x-form.select
-            name="category_id"
-            :value="$product->category_id"
-            label="{{ __('Category') }}"
-            :options="$categoryOptions"
-            placeholder="{{ __('Select category') }}"
-            required
-        />
-        <x-form.input
-            name="name"
-            :value="$product->name"
-            label="{{ __('Name') }}"
-            required
-        />
-    </div>
-
-    <div class="grid gap-4 sm:grid-cols-2">
-        <x-form.input
-            name="slug"
-            :value="$product->slug"
-            label="{{ __('Slug') }}"
-            placeholder="{{ __('Auto-generated if empty') }}"
-        />
-        <x-form.input
-            name="sku"
-            :value="$product->sku"
-            label="{{ __('SKU') }}"
-            required
-        />
-    </div>
-
-    <div class="grid gap-4 sm:grid-cols-3">
-        <x-form.input
-            name="price"
-            type="number"
-            step="0.01"
-            min="0"
-            :value="$product->price"
-            label="{{ __('Price') }}"
-            required
-        />
-        <x-form.select
-            name="currency"
-            :value="$product->currency ?? 'AMD'"
-            label="{{ __('Currency') }}"
-            :options="$currencyOptions"
-            required
-        />
-        <x-form.input
-            name="quantity"
-            type="number"
-            min="0"
-            :value="$product->quantity ?? 0"
-            label="{{ __('Quantity') }}"
-        />
-    </div>
-
-    <div class="grid gap-4 sm:grid-cols-2">
-        <x-form.select
-            name="is_active"
-            :value="$product->is_active ?? true"
-            label="{{ __('Status') }}"
-            :options="[1 => __('Active'), 0 => __('Inactive')]"
-        />
-    </div>
-
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
-        <x-form.textarea
-            name="description"
-            :value="$product->description"
-            label="{{ __('Description') }}"
-            rows="5"
-            placeholder="{{ __('Describe the product...') }}"
-        />
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="name">{{ __('Name') }}</label>
+        <input id="name" name="name" type="text" value="{{ old('name', $product->name) }}" required class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
     </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="slug">{{ __('Slug') }}</label>
+        <input id="slug" name="slug" type="text" value="{{ old('slug', $product->slug) }}" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="sku">{{ __('SKU') }}</label>
+        <input id="sku" name="sku" type="text" value="{{ old('sku', $product->sku) }}" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="category_id">{{ __('Category') }}</label>
+        <select id="category_id" name="category_id" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+            <option value="">{{ __('Select category') }}</option>
+            @foreach($categoriesForSelect as $id => $name)
+                <option value="{{ $id }}" @selected((string)old('category_id', $product->category_id) === (string)$id)>{{ $name }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="price">{{ __('Price') }}</label>
+        <input id="price" name="price" type="number" step="0.01" value="{{ old('price', $product->price) }}" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="currency">{{ __('Currency') }}</label>
+            <input id="currency" name="currency" type="text" value="{{ old('currency', $product->currency) }}" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="quantity">{{ __('Quantity') }}</label>
+            <input id="quantity" name="quantity" type="number" value="{{ old('quantity', $product->quantity) }}" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+        </div>
+    </div>
+    <div class="md:col-span-2">
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="description">{{ __('Description') }}</label>
+        <textarea id="description" name="description" rows="4" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">{{ old('description', $product->description) }}</textarea>
+    </div>
+    <div class="flex items-center gap-3">
+        <input id="is_active" name="is_active" type="checkbox" value="1" @checked(old('is_active', $product->is_active)) class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+        <label for="is_active" class="text-sm font-medium text-gray-700">{{ __('Active') }}</label>
+    </div>
+</div>
+
+<div class="mt-6 flex items-center gap-3">
+    <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+    <a href="{{ $cancelUrl }}" class="btn btn-ghost">{{ __('Cancel') }}</a>
 </div>
